@@ -1,0 +1,20 @@
+{
+  "N_TRACKS": 2000,
+  "in_dim": 32,
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "num_classes": 8,
+  "genre_to_idx": {
+    "Electronic": 0,
+    "Experimental": 1,
+    "Folk": 2,
+    "Hip-Hop": 3,
+    "Instrumental": 4,
+    "International": 5,
+    "Pop": 6,
+    "Rock": 7
+  },
+  "SEGMENT_SEC": 5,
+  "TAU": 0.85,
+  "SR": 22050
+}

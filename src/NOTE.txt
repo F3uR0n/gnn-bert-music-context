@@ -1,0 +1,10 @@
+NOTE ON SOURCE CODE AND PROJECT STRUCTURE
+
+Please note that the core development, training, and evaluation for this project were conducted interactively within Jupyter Notebooks to facilitate exploratory data analysis and visual output generation. 
+
+To comply with the src/ directory submission requirements, the notebooks have been exported as .py source scripts. Because multiple modular tasks were handled within unified notebooks to manage memory and runtime execution flow, the exported scripts map to the required architecture as follows:
+
+- Task_2.py exports mapped to: audio_features.py, graph_builder.py, gnn_model.py
+- Task-3.py exports mapped to: bert_encoder.py, fusion_model.py
+
+
