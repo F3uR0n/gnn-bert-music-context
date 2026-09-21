@@ -45,7 +45,7 @@ Trains a dual-encoder (`ContrastiveDualEncoder`) with InfoNCE loss on paired (au
 
 ## Datasets
 
-Each task uses specific datasets. All data is retrieved automatically at runtime inside the notebooks — no manual download is required.
+Each task uses specific datasets. All data is retrieved automatically at runtime inside the notebooks.
 
 ### Task 1 — MusicCaps
 
