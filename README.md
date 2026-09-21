@@ -4,8 +4,6 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-FFD21F?style=flat-square&logo=huggingface&logoColor=black)
 ![PyG](https://img.shields.io/badge/PyTorch_Geometric-GNN-blueviolet?style=flat-square)
-![License](https://img.shields.io/badge/License-Academic-lightgrey?style=flat-square)
-![Course](https://img.shields.io/badge/Course-CSE425-informational?style=flat-square)
 
 A four-task neural network project for music context understanding, combining Graph Neural Networks (GraphSAGE) with transformer-based text encoders (DistilBERT) via cross-attention fusion and contrastive alignment.
 
@@ -42,6 +40,54 @@ Fuses the frozen Task 2 GNN encoder with the warm-started Task 1 BERT encoder vi
 
 ### Task 4 — Contrastive Cross-Modal Alignment
 Trains a dual-encoder (`ContrastiveDualEncoder`) with InfoNCE loss on paired (audio graph, caption) samples from MusicCaps. Audio graphs are encoded by a `GraphSAGEEncoder`, captions by DistilBERT, and both projected to a shared 128-dim space. Evaluated with Recall@1, Recall@5, and Recall@10 on a retrieval task.
+
+---
+
+## Datasets
+
+Each task uses specific datasets. All data is retrieved automatically at runtime inside the notebooks — no manual download is required.
+
+### Task 1 — MusicCaps
+
+| Property | Detail |
+|---|---|
+| Name | Google MusicCaps |
+| Source | [HuggingFace — `google/MusicCaps`](https://huggingface.co/datasets/google/MusicCaps) |
+| Size | ~2,858 audio clips with free-text captions and aspect tags |
+| Usage | Multi-label tag classification (top-50 tags from `aspect_list`). Captions are tokenized with `distilbert-base-uncased` (max 128 tokens). |
+| Access | `datasets.load_dataset("google/MusicCaps")` |
+
+### Task 2 — FMA Small (Free Music Archive)
+
+| Property | Detail |
+|---|---|
+| Name | Free Music Archive — Small Subset |
+| Source | [FMA Dataset Repository](https://os.unil.cloud.switch.ch/fma/) — [GitHub](https://github.com/mdeff/fma) |
+| Audio | [fma_small.zip](https://os.unil.cloud.switch.ch/fma/fma_small.zip) — 8,000 tracks across 8 genres |
+| Metadata | [fma_metadata.zip](https://os.unil.cloud.switch.ch/fma/fma_metadata.zip) — track genre labels and tags |
+| Sampled | 2,000 tracks (250 per genre), split 70-15-15 into 1,398 train / 300 val / 300 test |
+| Genres | Electronic, Experimental, Folk, Hip-Hop, Instrumental, International, Pop, Rock |
+| Usage | Audio is segmented into 5-second windows; each segment becomes a 32-dim graph node (12 chroma + 20 MFCC). |
+| Access | Downloaded via `wget` at runtime inside `Task_2.ipynb` |
+
+### Task 3 — FMA Small + FMA Metadata (text hints)
+
+| Property | Detail |
+|---|---|
+| Name | FMA Small (audio) + FMA Metadata (tags as hint text) |
+| Source | Same as Task 2 — [fma_small.zip](https://os.unil.cloud.switch.ch/fma/fma_small.zip) and [fma_metadata.zip](https://os.unil.cloud.switch.ch/fma/fma_metadata.zip) |
+| Usage | Audio graphs are paired with per-track hint text built from FMA metadata tags (e.g. `"music clip; tags: ambient, trip-hop, ..."`) for cross-attention fusion training. The same 70-15-15 split from Task 2 is reused verbatim. |
+| Notes | The frozen Task 2 GNN checkpoint and `task2_split_track_ids.json` must be present before running Task 3. |
+
+### Task 4 — MusicCaps (Contrastive)
+
+| Property | Detail |
+|---|---|
+| Name | Google MusicCaps |
+| Source | [HuggingFace — `google/MusicCaps`](https://huggingface.co/datasets/google/MusicCaps) |
+| Sampled | 100 paired (audio graph, caption) samples; 80/20 train/test split |
+| Usage | Contrastive alignment of audio graph embeddings and free-text captions using InfoNCE loss. Audio features are simulated (random node features) due to `yt-dlp` server access limitations during training. |
+| Access | `datasets.load_dataset("google/MusicCaps")` |
 
 ---
 
@@ -138,7 +184,7 @@ pip install -r requirements.txt
 
 **2. Data**
 
-Raw FMA audio and MusicCaps metadata are downloaded automatically inside the notebooks via `wget` and the HuggingFace `datasets` library. The `data/raw/` directory is intentionally empty by design. Pre-built validation graphs are located in `data/processed/`.
+All datasets are retrieved automatically at runtime inside the notebooks. See the [Datasets](#datasets) section for full details on what each task uses. The `data/raw/` directory is intentionally empty by design. Pre-built validation graphs are located in `data/processed/`.
 
 ---
 
