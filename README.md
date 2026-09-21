@@ -230,3 +230,9 @@ The `src/` scripts are notebook exports provided for structural compliance. Beca
 - `fusion_model.py` covers the logic of: `bert_encoder` and `fusion_model`
 
 Full, executable implementations are contained in the `notebooks/` directory.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
